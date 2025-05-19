@@ -1,34 +1,39 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
+import lottieLogin from "../../lottie/login.json";
+import Lottie from 'lottie-react';
+import { AuthContext } from '../../Auth/authProvider';
 
 const SignUp = () => {
+
+    const { createUser } = useContext(AuthContext)
     const [showPassword, setShowPassword] = useState(false);
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-    });
-
     const togglePassword = () => setShowPassword(!showPassword);
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (formData.password !== formData.confirmPassword) {
-            alert("Passwords don't match!");
-            return;
+        const name = e.target.name.value
+        const password = e.target.password.value
+        const email = e.target.email.value
+        const confirmPassword = e.target.confirmPassword.value
+        console.log(name, password, email, confirmPassword)
+        if(password !== confirmPassword){
+            return
         }
-        console.log('Register Data:', formData);
-        // Add register logic here
+
+        createUser(email, password)
+            .then(result => {
+                alert('done')
+                console.log(result.user)
+            })
+            .then(error => {
+                console.log(error)
+            })
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 to-indigo-200 p-4">
-            <div className="bg-white shadow-xl rounded-2xl w-full max-w-md p-8">
+        <div className="min-h-screen flex items-center justify-center p-4">
+            <div className="bg-white bg-gradient-to-br from-pink-100 to-indigo-200 shadow-xl rounded-2xl w-full max-w-md p-8">
                 <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">Create Account</h2>
                 <form onSubmit={handleSubmit} className="space-y-5">
                     <div>
@@ -37,8 +42,6 @@ const SignUp = () => {
                             type="text"
                             name="name"
                             id="name"
-                            value={formData.name}
-                            onChange={handleChange}
                             required
                             className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400"
                         />
@@ -49,8 +52,6 @@ const SignUp = () => {
                             type="email"
                             name="email"
                             id="email"
-                            value={formData.email}
-                            onChange={handleChange}
                             required
                             className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400"
                         />
@@ -61,8 +62,6 @@ const SignUp = () => {
                             type={showPassword ? 'text' : 'password'}
                             name="password"
                             id="password"
-                            value={formData.password}
-                            onChange={handleChange}
                             required
                             className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400"
                         />
@@ -80,8 +79,6 @@ const SignUp = () => {
                             type={showPassword ? 'text' : 'password'}
                             name="confirmPassword"
                             id="confirmPassword"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
                             required
                             className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400"
                         />
@@ -96,6 +93,9 @@ const SignUp = () => {
                 <p className="mt-4 text-sm text-center text-gray-500">
                     Already have an account? <a href="#" className="text-indigo-500 hover:underline">Login</a>
                 </p>
+            </div>
+            <div className="w-96">
+                <Lottie animationData={lottieLogin} loop={true}></Lottie>
             </div>
         </div>
     );

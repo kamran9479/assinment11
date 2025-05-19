@@ -1,8 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { AuthContext } from '../Auth/authProvider';
 
 const Navbar = () => {
+    const { user,signOutUser } = useContext(AuthContext)
     const [menuOpen, setMenuOpen] = useState(false);
+
+    const handleSignOut = ()=>{
+        signOutUser()
+        .then(result=>{
+            console.log('logout success')
+        }).then(error=>{
+            console.log(error)
+        })
+    }
 
     return (
         <nav className="py-7 bg-gradient-to-br from-blue-600 to-purple-900 text-white">
@@ -29,20 +40,19 @@ const Navbar = () => {
                             <button className='btn btn-neutral'>Search</button>
 
                         </div> */}
-
-
-
                     </div>
-                    <div className='space-x-3 hidden md:block'>
-                        {/* Auth Buttons */}
+                    {
+                        user ? <div className='hidden md:block'><div> <button className='btn' onClick={handleSignOut}>LogOut</button></div></div> : <><div className='space-x-3 font-semibold hidden md:block'>
+                            {/* Auth Buttons */}
 
-                        <Link to="/register">
-                            <button className="bg-yellow-400 text-black px-3 py-1 rounded hover:bg-yellow-300">Register</button>
-                        </Link>
-                        <Link to="/login">
-                            <button className="bg-white text-green-700 px-3 py-1 rounded hover:bg-gray-100">Login</button>
-                        </Link>
-                    </div>
+                            <Link to="/register">
+                                <button className="bg-yellow-400 text-black px-3 py-1 rounded hover:bg-yellow-300">Register</button>
+                            </Link>
+                            <Link to="/login">
+                                <button className="bg-white text-green-700 px-3 py-1 rounded hover:bg-gray-100">Login</button>
+                            </Link>
+                        </div></>
+                    }
 
                     {/* Mobile Menu Button */}
                     <div className="md:hidden flex items-center">
@@ -79,14 +89,16 @@ const Navbar = () => {
                         placeholder="Search..."
                         className="w-full mt-2 px-2 py-1 rounded text-black"
                     /> */}
-                    <div className="flex mt-3 gap-2">
-                        <Link to="/register">
-                            <button className="bg-yellow-400 text-black px-3 py-1 rounded hover:bg-yellow-300">Register</button>
-                        </Link>
-                        <Link to="/login">
-                            <button className="bg-white text-green-700 px-3 py-1 rounded hover:bg-gray-100">Login</button>
-                        </Link>
-                    </div>
+                    {
+                        user ? <div><button className='btn' onClick={handleSignOut}>LogOut</button></div> : <div><div className="flex justify-evenly font-semibold mt-3 md:hidden">
+                            <Link to="/register">
+                                <button className="bg-yellow-400 w-44 text-black px-3 py-1 rounded hover:bg-yellow-300">Register</button>
+                            </Link>
+                            <Link to="/login">
+                                <button className="bg-white w-44 text-green-700 px-3 py-1 rounded hover:bg-gray-100">Login</button>
+                            </Link>
+                        </div></div>
+                    }
                 </div>
             )}
         </nav>
