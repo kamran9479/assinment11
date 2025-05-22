@@ -10,7 +10,7 @@ const FoodCard = ({ food }) => {
 
             <div className="p-4">
                 <h2 className="text-xl font-bold text-gray-800">{food.foodName}</h2>
-                <p className="text-sm text-gray-600 mb-2"><strong>Protions</strong>: {food.foodQuantity} • Expires: {new Date(food.expiredDateTime).toLocaleString()}</p>
+                <p className="text-sm text-gray-600 mb-2"><strong>Quantity</strong>: {food.foodQuantity} • Expires: {new Date(food.expiredDateTime).toLocaleString()}</p>
                 <p className="text-sm text-gray-700 mb-2">📍 {food.pickupLocation}</p>
                 {food.additionalNotes && (
                     <p className="text-sm text-gray-500 mb-3 italic">📝 {food.additionalNotes}</p>
@@ -24,7 +24,7 @@ const FoodCard = ({ food }) => {
                 </div>
 
                 <div className="mt-4 flex justify-between items-center">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${food.foodStatus === 'available' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${food.foodStatus == 'Available' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                         {food.foodStatus}
                     </span>
                     <Link to={`/foods/${food._id}`}><button className="bg-blue-500 text-white px-4 py-1.5 rounded-lg hover:bg-blue-600 transition text-sm font-medium">

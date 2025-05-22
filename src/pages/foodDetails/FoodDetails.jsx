@@ -13,8 +13,8 @@ const DetailsPage = () => {
 
   const { user } = useContext(AuthContext)
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [notes, setNotes] = useState('');
- 
+  const [notes, setNotes] = useState(food.additionalNotes);
+
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -22,21 +22,28 @@ const DetailsPage = () => {
   const handleRequest = (e) => {
     e.preventDefault();
 
-    const requestData = {
-      foodName: food.name,
-      foodImage: food.image,
-      foodId: food.id,
-      donatorEmail: food.donatorEmail,
-      donatorName: food.donatorName,
+    const requestFoodData = {
+      foodName: food.foodName,
+      foodImage: food.foodImg,
+      foodId: food._id,
+      donatorEmail: food.donator.email,
+      donatorName: food.donator.name,
       userEmail: user.email,
       requestDate: new Date().toISOString(),
       pickupLocation: food.pickupLocation,
-      expireDate: food.expireDate,
+      expireDate: new Date(food.expiredDateTime).toLocaleString(),
       notes,
-
     };
-    console.log('Requested Data:', requestData);
-    // You can now send this data to your backend/server 
+
+    fetch('http://localhost:3000/foodreq', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify(requestFoodData)
+    })
+      .then(data => data.json())
+      .then(result => console.log(result))
     closeModal();
   };
 
@@ -92,7 +99,7 @@ const DetailsPage = () => {
 
               {/* Status */}
               <span
-                className={`inline-block px-4 py-1 text-sm font-semibold rounded-full ${food.foodStatus === "available"
+                className={`inline-block px-4 py-1 text-sm font-semibold rounded-full ${food.foodStatus == "Available"
                   ? "bg-green-100 text-green-700"
                   : "bg-red-100 text-red-700"
                   }`}
@@ -166,7 +173,7 @@ const DetailsPage = () => {
               <label className="block text-sm font-semibold mb-1">Food ID</label>
               <input
                 type="text"
-                value={food.id}
+                value={food._id}
                 readOnly
                 className="w-full px-4 py-2 border rounded-md bg-gray-100"
               />
