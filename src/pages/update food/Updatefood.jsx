@@ -1,65 +1,54 @@
-import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../Auth/authProvider";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import Heading from "../../components/Heading";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Swal from "sweetalert2";
 
 
-const AddFood = () => {
-    const { user } = useContext(AuthContext)
-    const navigate = useNavigate();
-    console.log(user)
+const Updatefood = () => {
+    const food = useLoaderData()
+    const navigate = useNavigate()
+    console.log(food)
+    const [foodName,setFoodName] = useState(food.foodName)
+    const [foodImages,setfoodImage] = useState(food.foodImg)
+    const [foodQuantity,setfoodQuantity] = useState(food.foodQuantity)
+    const [pickupLocation,setpickupLocation] = useState(food.pickupLocation)
+    const [expiredDateTime,setexpiredDateTime] = useState(food.expiredDateTime)
+    const [additionalNotes,setadditionalNotes] = useState(food.additionalNotes)
+
     const handleSubmit = (e) => {
-        e.preventDefault()
-        const form = e.target
-        const foodName = form.foodName.value
-        const foodImg = form.foodImage.value
-        const foodQuantity = form.quantity.value
-        const pickupLocation = form.location.value
-        const expiredDateTime = form.expiredAt.value
-        const additionalNotes = form.notes.value
-        const foodStatus = form.status.value
-        const userName = user.displayName
-        const userEmail = user.email
-        const photo = user.photoURL
 
-        const donator = {
-            name: userName,
-            email: userEmail,
-            photo
-        }
-
-        const food = {
+        const data = {
             foodName,
-            foodImg,
+            foodImages,
             foodQuantity,
             pickupLocation,
             expiredDateTime,
-            additionalNotes,
-            foodStatus,
-            donator
-        }
+            additionalNotes
 
-        fetch('http://localhost:3000/foods', {
-            method: 'POST',
+        }
+        e.preventDefault()
+        fetch(`http://localhost:3000/updatefood/${food._id}`, {
+            method: 'PUT',
             headers: {
                 'content-type': 'application/json'
             },
-            body: JSON.stringify(food)
+            body: JSON.stringify(data)
         })
-            .then(data => data.json())
-            .then(result => {
+            .then(res => res.json())
+            .then(data => {
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Food added Successfully',
-                    text: 'welcome',
+                    title: "Updated!",
+                    icon: "success",
+                    draggable: true
                 });
-                navigate('/availablefood')
-                
+                navigate(`/foods/${food._id}`)
+
             })
+
     }
 
     return (
+
         <div>
             <Heading title={"Share a Meal, Spread a Smile"} para={"Got extra food? Don’t let it go to waste! Share it with your community by adding the details below. Every shared meal can make someone’s day a little better."}></Heading>
             <div className="max-w-3xl mx-auto p-6 bg-white my-5 rounded-lg shadow-2xl">
@@ -70,6 +59,8 @@ const AddFood = () => {
                         <input
                             type="text"
                             name="foodName"
+                            onChange={(e) => setFoodName(e.target.value)}
+                            value={foodName}
                             required
                             className="w-full border p-2 rounded"
                         />
@@ -80,7 +71,11 @@ const AddFood = () => {
                         <input
                             type="url"
                             name="foodImage"
-
+                            onChange={(e) => {
+                                setfoodImage(e.target.value)
+                                console.log(e.target)
+                            }}
+                            value={foodImages}
                             required
                             className="w-full border p-2 rounded"
                         />
@@ -91,7 +86,8 @@ const AddFood = () => {
                         <input
                             type="text"
                             name="quantity"
-
+                            onChange={(e) => setfoodQuantity(e.target.value)}
+                            value={foodQuantity}
                             required
                             className="w-full border p-2 rounded"
                         />
@@ -102,7 +98,8 @@ const AddFood = () => {
                         <input
                             type="text"
                             name="location"
-
+                            onChange={(e) => setpickupLocation(e.target.value)}
+                            value={pickupLocation}
                             required
                             className="w-full border p-2 rounded"
                         />
@@ -113,7 +110,8 @@ const AddFood = () => {
                         <input
                             type="date"
                             name="expiredAt"
-
+                            onChange={(e) => setexpiredDateTime(e.target.value)}
+                            value={expiredDateTime}
                             required
                             className="w-full border p-2 rounded"
                         />
@@ -123,6 +121,8 @@ const AddFood = () => {
                         <label className="block font-medium">Additional Notes</label>
                         <textarea
                             name="notes"
+                            onChange={(e) => setadditionalNotes(e.target.value)}
+                            value={additionalNotes}
                             className="w-full border p-2 rounded"
                         />
                     </div>
@@ -133,31 +133,16 @@ const AddFood = () => {
                             type="text"
                             name="status"
                             value={'Available'}
-                            readOnly
                             className="w-full border p-2 rounded bg-gray-100"
                         />
                     </div>
 
-                    <div className="border-t pt-4">
-                        <h3 className="font-semibold mb-2">Donator Info</h3>
-                        <div className="flex items-center space-x-4">
-                            <img
-                                src={user?.photoURL}
-                                alt="Donator"
-                                className="w-12 h-12 rounded-full"
-                            />
-                            <div>
-                                <p className="font-medium">{user?.name}</p>
-                                <p className="text-sm text-gray-600">{user?.email}</p>
-                            </div>
-                        </div>
-                    </div>
 
                     <button
                         type="submit"
                         className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
                     >
-                        Add Food
+                        Update Food
                     </button>
                 </form>
             </div>
@@ -165,4 +150,4 @@ const AddFood = () => {
     );
 };
 
-export default AddFood;
+export default Updatefood;

@@ -9,49 +9,55 @@ import MyFoodReq from './../pages/My Food Request/MyFoodReq';
 import ManageFood from './../pages/Manage My Foods/ManageFood';
 import FoodDetails from "../pages/foodDetails/FoodDetails";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
+import Updatefood from "../pages/update food/Updatefood";
 
 const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <App></App>,
-      children: [
-        {
-          path: "/",
-          element: <Home></Home>
-        },
-        {
-          path:"/login",
-          element: <Login></Login>
+  {
+    path: "/",
+    element: <App></App>,
+    children: [
+      {
+        path: "/",
+        element: <Home></Home>
+      },
+      {
+        path: "/login",
+        element: <Login></Login>
 
-        },
-        {
-          path:"/register",
-          element: <SignUp></SignUp>
+      },
+      {
+        path: "/register",
+        element: <SignUp></SignUp>
 
-        },
-        {
-          path:"/availablefood",
-          element: <AvailableFood></AvailableFood>
-        },
-        {
-          path:"/addfood",
-          element: <PrivateRoute><AddFood></AddFood></PrivateRoute>
-        },
-        {
-          path:"/foodrequest",
-          element: <PrivateRoute><MyFoodReq></MyFoodReq></PrivateRoute>
-        },
-        {
-          path:"/managefood",
-          element: <PrivateRoute><ManageFood></ManageFood></PrivateRoute>
-        },
-        {
-          path: "/foods/:id",
-          element: <PrivateRoute><FoodDetails></FoodDetails></PrivateRoute>,
-          loader: ({params})=> fetch(`http://localhost:3000/foods/${params.id}`)
-        }
-      ],
-    },
-  ]);
+      },
+      {
+        path: "/availablefood",
+        element: <AvailableFood></AvailableFood>
+      },
+      {
+        path: "/addfood",
+        element: <PrivateRoute><AddFood></AddFood></PrivateRoute>
+      },
+      {
+        path: "/foodrequest",
+        element: <PrivateRoute><MyFoodReq></MyFoodReq></PrivateRoute>
+      },
+      {
+        path: "/managefood",
+        element: <PrivateRoute><ManageFood></ManageFood></PrivateRoute>
+      },
+      {
+        path: "/updatefood/:id",
+        element: <PrivateRoute><Updatefood></Updatefood></PrivateRoute>,
+        loader: ({ params }) => fetch(`http://localhost:3000/foods/${params.id}`)
+      },
+      {
+        path: "/foods/:id",
+        element: <PrivateRoute><FoodDetails></FoodDetails></PrivateRoute>,
+        loader: ({ params }) => fetch(`http://localhost:3000/foods/${params.id}`)
+      }
+    ],
+  },
+]);
 
-  export default router;
+export default router;

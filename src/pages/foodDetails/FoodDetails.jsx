@@ -33,6 +33,7 @@ const DetailsPage = () => {
       pickupLocation: food.pickupLocation,
       expireDate: new Date(food.expiredDateTime).toLocaleString(),
       notes,
+      foodStatus : "Requested"
     };
 
     fetch('http://localhost:3000/foodreq', {

@@ -1,9 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../Auth/authProvider';
+import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const ManageFood = () => {
 
-    const {user}= useContext(AuthContext)
+    const { user } = useContext(AuthContext)
 
     const [foods, setFoods] = useState([])
     console.log(foods)
@@ -15,6 +17,25 @@ const ManageFood = () => {
             .then(data => setFoods(data))
     }, [user.email])
 
+    const handleDelete = (id) => {
+        Swal.fire({
+            title: "Confirm Delete?",
+            showCancelButton: true,
+            confirmButtonText: "Delete",
+            denyButtonText: `Cancel`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`http://localhost:3000/deletefood/${id}`, {
+                    method: 'DELETE'
+                })
+                    .then(res => res.json())
+                    .then(() => {
+                        Swal.fire("Deleted!", "", "success");
+                        navigate('/availablefood');
+                    });
+            }
+        });
+    }
 
     return (
         <div className="p-6 min-h-screen bg-white rounded shadow-md max-w-7xl mx-auto mt-10">
@@ -58,10 +79,10 @@ const ManageFood = () => {
 
                                     <td className="py-3 px-4 whitespace-nowrap">
                                         <div className="flex flex-col sm:flex-row justify-center items-center gap-2">
-                                            <button className="bg-blue-500 text-white px-4 py-1.5 rounded hover:bg-blue-600 transition">
+                                            <Link to={`/updatefood/${food._id}`}><button className="bg-blue-500 text-white px-4 py-1.5 rounded hover:bg-blue-600 transition">
                                                 Update
-                                            </button>
-                                            <button className="bg-red-500 text-white px-4 py-1.5 rounded hover:bg-red-600 transition">
+                                            </button></Link>
+                                            <button onClick={() => handleDelete(food._id)} className="bg-red-500 text-white px-4 py-1.5 rounded hover:bg-red-600 transition">
                                                 Delete
                                             </button>
                                         </div>
@@ -92,7 +113,7 @@ const ManageFood = () => {
                         </div>
                         <div className="text-sm text-gray-700">
                             <p><strong>Pickup:</strong> {food.pickupLocation}</p>
-                         
+
                             <p>
                                 <strong>Expires:</strong>{' '}
                                 {new Date(food.expiredDateTime).toLocaleString('en-US', {
@@ -102,12 +123,12 @@ const ManageFood = () => {
                             </p>
                         </div>
                         <div className="flex justify-between gap-3 pt-2">
-                            <button className="bg-blue-500 text-white px-4 py-1.5 rounded hover:bg-blue-600 transition">
+                            <Link to="/updatefood"><button className="bg-blue-500 text-white px-4 py-1.5 rounded hover:bg-blue-600 transition">
                                 Update
-                            </button>
-                            <button className="bg-red-500 text-white px-4 py-1.5 rounded hover:bg-red-600 transition">
+                            </button></Link>
+                            <Link><button className="bg-red-500 text-white px-4 py-1.5 rounded hover:bg-red-600 transition">
                                 Delete
-                            </button>
+                            </button></Link>
                         </div>
                     </div>
                 ))}

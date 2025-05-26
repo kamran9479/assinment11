@@ -1,18 +1,18 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { AuthContext } from '../Auth/authProvider';
 
 const Navbar = () => {
-    const { user,signOutUser } = useContext(AuthContext)
+    const { user, signOutUser } = useContext(AuthContext)
     const [menuOpen, setMenuOpen] = useState(false);
 
-    const handleSignOut = ()=>{
+    const handleSignOut = () => {
         signOutUser()
-        .then(result=>{
-            console.log('logout success')
-        }).then(error=>{
-            console.log(error)
-        })
+            .then(result => {
+                console.log('logout success')
+            }).then(error => {
+                console.log(error)
+            })
     }
 
     return (
@@ -42,7 +42,15 @@ const Navbar = () => {
                         </div> */}
                     </div>
                     {
-                        user ? <div className='hidden md:block'><div> <button className='btn' onClick={handleSignOut}>LogOut</button></div></div> : <><div className='space-x-3 font-semibold hidden md:block'>
+                        user ? <div className='hidden md:flex '>
+                            <div className='flex justify-center items-center'>
+                                <div className='p-3 mr-5'>
+                                    <img className='w-10 h-10 mx-auto rounded-full' src={user.photoURL} alt="user" />
+                                    <p className='text-lg text-center'>{user.displayName}</p>
+                                </div>
+                                <button className='btn' onClick={handleSignOut}>LogOut</button>
+                            </div>
+                        </div> : <><div className='space-x-3 font-semibold hidden md:block'>
                             {/* Auth Buttons */}
 
                             <Link to="/register">
@@ -89,8 +97,11 @@ const Navbar = () => {
                         placeholder="Search..."
                         className="w-full mt-2 px-2 py-1 rounded text-black"
                     /> */}
+
                     {
-                        user ? <div><button className='btn' onClick={handleSignOut}>LogOut</button></div> : <div><div className="flex justify-evenly font-semibold mt-3 md:hidden">
+                        user ? <div>
+                            <button className='btn' onClick={handleSignOut}>LogOut</button>
+                        </div> : <div><div className="flex justify-evenly font-semibold mt-3 md:hidden">
                             <Link to="/register">
                                 <button className="bg-yellow-400 w-44 text-black px-3 py-1 rounded hover:bg-yellow-300">Register</button>
                             </Link>
@@ -99,6 +110,7 @@ const Navbar = () => {
                             </Link>
                         </div></div>
                     }
+
                 </div>
             )}
         </nav>
