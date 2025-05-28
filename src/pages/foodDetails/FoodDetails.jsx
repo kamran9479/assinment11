@@ -1,9 +1,10 @@
 
 import { useContext, useState } from 'react';
 import Modal from 'react-modal';
-import { AuthContext } from '../../Auth/authProvider';
+
 import { useLoaderData } from 'react-router-dom';
 import Heading from '../../components/Heading';
+import { AuthContext, serverURL } from '../../Auth/AuthProvider';
 
 Modal.setAppElement('#root'); // Required for accessibility
 
@@ -24,19 +25,19 @@ const DetailsPage = () => {
 
     const requestFoodData = {
       foodName: food.foodName,
-      foodImage: food.foodImg,
+      foodImg: food.foodImg,
       foodId: food._id,
       donatorEmail: food.donator.email,
-      donatorName: food.donator.name,
+      donatorName: food.donator?.name,
       userEmail: user.email,
       requestDate: new Date().toISOString(),
       pickupLocation: food.pickupLocation,
-      expireDate: new Date(food.expiredDateTime).toLocaleString(),
+      expiredDateTime: new Date(food.expiredDateTime).toLocaleString(),
       notes,
       foodStatus : "Requested"
     };
 
-    fetch('http://localhost:3000/foodreq', {
+    fetch(`${serverURL}/foodreq`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'

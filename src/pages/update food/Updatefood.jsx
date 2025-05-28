@@ -2,6 +2,7 @@ import { useLoaderData, useNavigate } from "react-router-dom";
 import Heading from "../../components/Heading";
 import { useState } from "react";
 import Swal from "sweetalert2";
+import { serverURL } from "../../Auth/AuthProvider";
 
 
 const Updatefood = () => {
@@ -9,7 +10,7 @@ const Updatefood = () => {
     const navigate = useNavigate()
     console.log(food)
     const [foodName,setFoodName] = useState(food.foodName)
-    const [foodImages,setfoodImage] = useState(food.foodImg)
+    const [foodImg,setfoodImage] = useState(food.foodImg)
     const [foodQuantity,setfoodQuantity] = useState(food.foodQuantity)
     const [pickupLocation,setpickupLocation] = useState(food.pickupLocation)
     const [expiredDateTime,setexpiredDateTime] = useState(food.expiredDateTime)
@@ -19,7 +20,7 @@ const Updatefood = () => {
 
         const data = {
             foodName,
-            foodImages,
+            foodImg,
             foodQuantity,
             pickupLocation,
             expiredDateTime,
@@ -27,7 +28,7 @@ const Updatefood = () => {
 
         }
         e.preventDefault()
-        fetch(`http://localhost:3000/updatefood/${food._id}`, {
+        fetch(`${serverURL}/updatefood/${food._id}`, {
             method: 'PUT',
             headers: {
                 'content-type': 'application/json'
@@ -75,7 +76,7 @@ const Updatefood = () => {
                                 setfoodImage(e.target.value)
                                 console.log(e.target)
                             }}
-                            value={foodImages}
+                            value={foodImg}
                             required
                             className="w-full border p-2 rounded"
                         />

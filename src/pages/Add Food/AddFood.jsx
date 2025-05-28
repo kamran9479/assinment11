@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../Auth/authProvider";
+import  { useContext } from "react";
 import Heading from "../../components/Heading";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-
+import { AuthContext } from "../../Auth/AuthProvider";
+import { serverURL } from "../../Auth/AuthProvider";
 
 const AddFood = () => {
     const { user } = useContext(AuthContext)
@@ -40,7 +40,7 @@ const AddFood = () => {
             donator
         }
 
-        fetch('http://localhost:3000/foods', {
+        fetch(`${serverURL}/foods`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'

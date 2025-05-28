@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../Auth/authProvider';
+import { AuthContext, serverURL } from '../../Auth/AuthProvider';
 
 const MyFoodReq = () => {
     const { user } = useContext(AuthContext)
@@ -9,7 +9,7 @@ const MyFoodReq = () => {
 
 
     useEffect(() => {
-        fetch(`http://localhost:3000/foodreq?email=${user.email}`)
+        fetch(`${serverURL}/foodreq?email=${user.email}`)
             .then(res => res.json())
             .then(data => setFoods(data))
     }, [user.email])
@@ -36,7 +36,7 @@ const MyFoodReq = () => {
                                 <tr key={index} className="hover:bg-gray-50 transition">
                                     <td className="py-3 px-4">
                                         <img
-                                            src={food.foodImage}
+                                            src={food.foodImg}
                                             alt="food"
                                             className="w-32 h-24 object-cover rounded-md border"
                                         />
@@ -45,7 +45,7 @@ const MyFoodReq = () => {
 
                                     <td className="py-3 px-4">{food.pickupLocation}</td>
                                     <td className="py-3 px-4 whitespace-nowrap">
-                                        {new Date(food.expireDate).toLocaleString('en-US', {
+                                        {new Date(food.expiredDateTime).toLocaleString('en-US', {
                                             dateStyle: 'medium',
                                             timeStyle: 'short',
                                         })}
@@ -73,7 +73,7 @@ const MyFoodReq = () => {
                     >
                         <div className="flex items-center gap-4">
                             <img
-                                src={food.foodImage}
+                                src={food.foodImg}
                                 alt="food"
                                 className="w-24 h-20 object-cover rounded-md border"
                             />
@@ -86,7 +86,7 @@ const MyFoodReq = () => {
                             <p><strong>Pickup:</strong> {food.pickupLocation}</p>
                             <p>
                                 <strong>expire Date:</strong>{' '}
-                                {new Date(food.expireDate).toLocaleString('en-US', {
+                                {new Date(food.expiredDateTime).toLocaleString('en-US', {
                                     dateStyle: 'medium',
                                     timeStyle: 'short',
                                 })}

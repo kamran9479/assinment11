@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../Auth/authProvider';
+import { AuthContext, serverURL } from '../../Auth/AuthProvider';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
@@ -12,7 +12,7 @@ const ManageFood = () => {
 
 
     useEffect(() => {
-        fetch(`http://localhost:3000/managefood?email=${user.email}`)
+        fetch(`${serverURL}/managefood?email=${user.email}`)
             .then(res => res.json())
             .then(data => setFoods(data))
     }, [user.email])
@@ -25,7 +25,7 @@ const ManageFood = () => {
             denyButtonText: `Cancel`
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:3000/deletefood/${id}`, {
+                fetch(`${serverURL}/deletefood/${id}`, {
                     method: 'DELETE'
                 })
                     .then(res => res.json())
